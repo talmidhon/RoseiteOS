@@ -1,0 +1,20 @@
+name: Build Secure Torah ISO
+on: [workflow_dispatch, push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build ISO
+        run: |
+          chmod +x build.sh
+          ./build.sh
+
+      - name: Upload ISO
+        uses: actions/upload-artifact@v4
+        with:
+          name: Secure-Torah-OS
+          path: live-custom/*.iso
