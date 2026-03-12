@@ -26,19 +26,23 @@ modules:
       - firefox-langpacks
       - konsole
       
-      # רשת וקישוריות (כולל תלויות ופלאגינים)
+      # רשת וקישוריות (כולל כל הפלאגינים והשירותים)
       - plasma-nm
       - plasma-nm-vpnc
+      - plasma-nm-openvpn
       - kde-connect
       - kde-connect-libs
+      - kdeconnectd
       - krfb
       - krfb-libs
       
       # כלי מערכת (כולל פלאגינים והתראות)
       - plasma-discover
       - plasma-discover-notifier
+      - plasma-discover-kns
       - kate
       - kate-plugins
+      - kate-krunner-plugin
       - kwrite
       - firewall-config
       - kwalletmanager5
@@ -47,9 +51,10 @@ modules:
       - kdebugsettings
       - kernel-modules-extra
       
-      # מנועי קלט (כולל התוסף היפני שהופיע בלוג)
+      # מנועי קלט
       - fcitx5
       - fcitx5-mozc
+      - fcitx5-data
 
   # התקנת Obsidian כ-Flatpak בצורה מובנית
   - type: default-flatpaks
