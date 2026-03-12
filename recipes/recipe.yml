@@ -15,7 +15,6 @@ modules:
       - sudo
       - konsole
       - elisa-player
-      - dragon
       - kinfocenter
       - kernel-modules-extra
 
