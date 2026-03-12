@@ -59,6 +59,8 @@ modules:
       - fcitx5-unikey
       - fcitx5-chewing
       - fcitx5-data
+      - fcitx5-sayura
+      - fcitx5-chinese-addons
 
   # התקנת Obsidian כ-Flatpak בצורה מובנית
   - type: default-flatpaks
