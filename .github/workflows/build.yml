@@ -21,4 +21,5 @@ jobs:
         with:
           recipe: recipes/recipe.yml
           registry_token: ${{ github.token }}
-          # ביטלנו את prune וצמצמנו למינימום הנדרש לבנייה ראשונה
+          # האופציה הזו מבטלת את הצורך במפתחות חתימה כרגע
+          build_opts: "--no-sign"
