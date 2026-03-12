@@ -8,9 +8,9 @@ modules:
   # שינוי השם והגרסה המוצגים במערכת
   - type: os-release
     properties:
-      name: RoseiteOS
-      pretty-name: RoseiteOS
-      version: 0.1
+      name: "RoseiteOS"
+      pretty-name: "RoseiteOS"
+      version: "0.1"
 
   - type: script
     scripts:
