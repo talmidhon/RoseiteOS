@@ -29,7 +29,6 @@ modules:
       - gnome-software
 
       - malcontent-control   # בקרת הורים (GUI)
-      - malcontent           # backend (אם אתה לא צריך בכלל)
 
       - htop
       - nvtop
