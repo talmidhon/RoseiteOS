@@ -21,7 +21,7 @@ modules:
       - onlyoffice-desktopeditors
       - gnome-text-editor
       - gnome-shell-extension-dash-to-dock
-      - https://github.com/digimezzo/dopamine/releases/download/v3.0.2/Dopamine-3.0.2.rpm
+#      - https://github.com/digimezzo/dopamine/releases/download/v3.0.2/Dopamine-3.0.2.rpm
     remove:
       # דפדפנים וטרמינל (כולל חבילות השפה)
       - firefox
@@ -35,6 +35,8 @@ modules:
 
       - gnome-tour
       - yelp                 # Help (ה־viewer של GNOME)
+      - ptyxis                # terminal
+      
         
       # רשת וקישוריות (כולל כל הפלאגינים והשירותים)
 
@@ -42,6 +44,6 @@ modules:
   - type: script
     scripts:
       - set-defaults.sh
-      - install-zayit.sh
+#      - install-zayit.sh
       - install-zmanbar.sh
       - hermetic-lock.sh
