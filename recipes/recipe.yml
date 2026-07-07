@@ -21,7 +21,13 @@ modules:
       - onlyoffice-desktopeditors
       - gnome-text-editor
       - gnome-shell-extension-dash-to-dock
+<<<<<<< HEAD
 #      - https://github.com/digimezzo/dopamine/releases/download/v3.0.2/Dopamine-3.0.2.rpm
+=======
+      - https://github.com/digimezzo/dopamine/releases/download/v3.0.2/Dopamine-3.0.2.rpm
+      - eog
+      - evince
+>>>>>>> upstream/main
     remove:
       # דפדפנים וטרמינל (כולל חבילות השפה)
       - firefox
