@@ -6,12 +6,23 @@ RoseiteOS is a Linux distribution, based on Fedora SliverBlue 43.
 
 RoseiteOS is only for Torah study:
 
-Preinstalled:
+Included in the image:
 
-- Zayit books
 - OnlyOffice
-- Dopamine Music player
 - Gnome text editor
+- Image viewer (eog)
+- PDF viewer (evince)
+
+Not installed:
+
+- Zayit books — its installer is disabled in `recipes/recipe.yml`.
+- Dopamine — its package entry is disabled in `recipes/recipe.yml`.
+
+OnlyOffice restrictions:
+
+- Presentation, settings, and cloud/external panels are hidden.
+- The presentation editor is removed from the image.
+- These restrictions are applied by `files/scripts/hermetic-lock.sh`.
 
 "Kosher" features:
 
@@ -29,8 +40,7 @@ Easy & lightweight:
 
 ## Todo list:
 
-- Pin OnlyOffice, Zayit, Dopamine, Files, to Dock
-- Translate Dopamine to hebrew
+- Pin OnlyOffice and Files to Dock
 - Search for Gnome theme that looked as Windows (for non-techincal users)
 
 ## Customizing
