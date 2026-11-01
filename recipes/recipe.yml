@@ -2,7 +2,7 @@
 name: roseite
 description: RoseiteOS - A completely hermetic, terminal-free, secure study system.
 base-image: ghcr.io/ublue-os/silverblue-main
-image-version: latest
+image-version: 43
 
 modules:
   # שינוי השם והגרסה המוצגים במערכת
