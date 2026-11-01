@@ -1,0 +1,34 @@
+name: Publish library transfer chunks
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Prepare byte-identical transfer chunks
+        shell: python
+        run: |
+          import urllib.request, pathlib, hashlib, json
+          url = 'https://github.com/kdroidFilter/SeforimLibrary/releases/download/v3-20261012193827/seforim_bundle.tar.zst.part02'
+          expected = 'c3aced138607760ab8fb3f1a253d996b5c1112753eef1c6621a8676339b7436e'
+          source = pathlib.Path('seforim_bundle.tar.zst.part02')
+          urllib.request.urlretrieve(url, source)
+          with source.open('rb') as stream:
+              assert hashlib.file_digest(stream, 'sha256').hexdigest() == expected
+          out = pathlib.Path('transfer'); out.mkdir()
+          parts = []
+          with source.open('rb') as stream:
+              index = 1
+              while block := stream.read(64 * 1024 * 1024):
+                  name = source.name + f'.chunk{index:04d}'
+                  (out / name).write_bytes(block)
+                  parts.append(dict(file=name, size=len(block), sha256=hashlib.sha256(block).hexdigest()))
+                  index += 1
+          (out / 'library-part02-manifest.json').write_text(json.dumps(dict(file=source.name, size=source.stat().st_size, sha256=expected, source=url, parts=parts), indent=2))
+          (out / 'LIBRARY-SOURCE.txt').write_text('Byte-identical chunks of the original public library asset. Source and applicable terms: https://github.com/kdroidFilter/SeforimLibrary/releases/tag/v3-20261012193827\nNo library content has been modified. Join chunks in manifest order and verify SHA256.\n')
+      - name: Upload supplemental chunks
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload test-2026-11-01 transfer/* --repo "$GITHUB_REPOSITORY" --clobber
