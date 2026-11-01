@@ -1,0 +1,30 @@
+name: Publish resumable small ISO parts
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: roseite-final-iso
+          path: iso
+          run-id: '41330222912'
+          github-token: ${{ github.token }}
+      - name: Package smaller parts for unreliable connections
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISO_PART_MIB: '64'
+          ISO_PART_SUFFIX: chunk
+        run: |
+          set -euo pipefail
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/41330222912" > source-run.json
+          python3 scripts/package-test-iso.py iso/roseite-offline.iso release source-run.json
+          mv release/iso-manifest.json release/iso-smallparts-manifest.json
+          rm release/README.md release/SHA256SUMS
+          sed 's/iso-manifest.json/iso-smallparts-manifest.json/g' scripts/Join-RoseiteISO.ps1 > release/Join-RoseiteISO-Small.ps1
+          gh release upload test-2026-11-01 release/* --clobber

@@ -1,6 +1,7 @@
 """Split an existing ISO into release assets and record their SHA256 digests."""
 import hashlib
 import json
+import os
 import pathlib
 import sys
 
@@ -11,13 +12,15 @@ if run.get("conclusion") != "success":
 destination.mkdir(parents=True, exist_ok=True)
 whole = hashlib.sha256()
 parts = []
+part_bytes = int(os.environ.get('ISO_PART_MIB', '1900')) * 1024 * 1024
+suffix = os.environ.get('ISO_PART_SUFFIX', 'part')
 with source.open("rb") as stream:
     index = 1
     while True:
         first = stream.read(1024 * 1024)
         if not first:
             break
-        name = f"{source.name}.part{index:02d}"
+        name = f"{source.name}.{suffix}{index:04d}" if suffix != 'part' else f"{source.name}.part{index:02d}"
         digest = hashlib.sha256()
         size = 0
         with (destination / name).open("wb") as output:
@@ -27,9 +30,9 @@ with source.open("rb") as stream:
                 digest.update(block)
                 whole.update(block)
                 size += len(block)
-                if size == 1900 * 1024 * 1024:
+                if size == part_bytes:
                     break
-                block = stream.read(min(1024 * 1024, 1900 * 1024 * 1024 - size))
+                block = stream.read(min(1024 * 1024, part_bytes - size))
         parts.append(dict(file=name, size=size, sha256=digest.hexdigest()))
         index += 1
 manifest = dict(file=source.name, size=source.stat().st_size, sha256=whole.hexdigest(),
