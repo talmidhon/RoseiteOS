@@ -1,0 +1,46 @@
+name: Publish test ISO release
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Successful ISO workflow run
+        required: true
+        default: '41330222912'
+      tag:
+        description: Test release tag
+        required: true
+        default: test-2026-11-01
+permissions:
+  contents: write
+  actions: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download existing ISO
+        uses: actions/download-artifact@v4
+        with:
+          name: roseite-final-iso
+          path: iso
+          run-id: ${{ inputs.run_id }}
+          github-token: ${{ github.token }}
+      - name: Prepare verified release parts
+        env:
+          SOURCE_RUN: ${{ inputs.run_id }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/$SOURCE_RUN" > source-run.json
+          python3 scripts/package-test-iso.py iso/roseite-offline.iso release source-run.json
+          cp scripts/Join-RoseiteISO.ps1 release/
+      - name: Publish prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          source_sha=$(python3 -c 'import json; print(json.load(open("source-run.json"))["head_sha"])')
+          gh release create "$RELEASE_TAG" --target "$source_sha" --draft --prerelease --title "RoseiteOS test ISO — $RELEASE_TAG" --notes-file release/README.md
+          gh release upload "$RELEASE_TAG" release/*
+          gh release edit "$RELEASE_TAG" --draft=false
