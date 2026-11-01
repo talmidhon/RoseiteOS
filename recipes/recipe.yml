@@ -46,6 +46,6 @@ modules:
   - type: script
     scripts:
       - set-defaults.sh
-#      - install-zayit.sh
+      - install-zayit.sh
       - install-zmanbar.sh
       - hermetic-lock.sh
